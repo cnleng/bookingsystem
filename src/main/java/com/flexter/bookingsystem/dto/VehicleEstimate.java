@@ -9,12 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VehicleDto {
-    private String id;
-    private String make;
-    private String year;
-    private String model;
-    private Double rate;
-    private String city;
-    private OwnerDto owner;
+public class VehicleEstimate {
+
+    private Double price;
+    private VehicleDto vehicleDto;
+
 }

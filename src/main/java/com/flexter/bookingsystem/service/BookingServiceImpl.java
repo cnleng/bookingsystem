@@ -1,6 +1,7 @@
 package com.flexter.bookingsystem.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -43,18 +44,18 @@ public class BookingServiceImpl implements BookingService {
         LocalDateTime returnTime = bo.getReturnDateTime();
         String vehicleId = bo.getVehicleId();
 
-        Vehicle vehicle = vehicleRepository.findById(vehicleId).orElseThrow(() -> new VehicleNotExistException(vehicleId));
-        boolean isTargetPickupDay = vehicle.getAvailabilities().stream()
-            .filter(a -> a.getFromTime().isBefore(pickupTime.toLocalTime())
-            && a.getToTime().isAfter(pickupTime.toLocalTime()))
-            .anyMatch(a -> a.getDayOfWeek().equals(pickupTime.getDayOfWeek()) );
-        boolean isTargetReturnDay = vehicle.getAvailabilities().stream()
-            .filter(a -> a.getFromTime().isBefore(pickupTime.toLocalTime())
-            && a.getToTime().isAfter(pickupTime.toLocalTime()))
-            .anyMatch(a -> a.getDayOfWeek().equals(returnTime.getDayOfWeek()) );
-        if (!isTargetPickupDay || !isTargetReturnDay) {
+        List<Vehicle> vehicles = vehicleRepository.getVehicleByIdPickupReturnTime(
+            vehicleId, 
+            pickupTime.getDayOfWeek(),
+            returnTime.getDayOfWeek(),
+            pickupTime.toLocalTime(),
+            returnTime.toLocalTime()
+            );
+        
+        if (vehicles==null || vehicles.isEmpty() ) {
             throw new VehicleNotAvailableException(pickupTime.toString(), returnTime.toString());
         }
+        Vehicle vehicle = vehicles.stream().findFirst().get();
 
         Double price = priceCalculator.getPrice(pickupTime, returnTime, vehicle.getRate());
         Booking booking = Booking.builder()

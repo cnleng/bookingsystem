@@ -49,7 +49,7 @@ public class BookingController {
     @PostMapping
     @Operation(summary = "Create a booking", description = "Create a new booking for a vehicle")
     public ResponseEntity<ApiResponse<BookingDto>> createBooking(@Valid @RequestBody CreateBookingRequest request) throws Exception {
-        
+          
         log.info("Creating booking with vehicle Id={}, pickupDateTime={}, returnDateTime={}",
                 request.getVehicleId(),
                 request.getPickupDateTime(),

@@ -41,7 +41,7 @@ public class ServiceExceptionHandler {
 
     @ExceptionHandler(BookingNotExistException.class)
     public ResponseEntity<ApiResponse<String>> handleBookingNotExistException(BookingNotExistException e, WebRequest request) {
-        String message = String.format("An error occurred while getting Booking with id [{}] ", e.getEntityId());
+        String message = String.format("An error occurred while getting Booking with id [%s] ", e.getEntityId());
         log.error(message);
         ApiResponse<String> response = ApiResponse.<String>builder()
                 .message(message)
@@ -51,7 +51,7 @@ public class ServiceExceptionHandler {
 
     @ExceptionHandler(VehicleNotExistException.class)
     public ResponseEntity<ApiResponse<String>> handleVehicleNotExistException(VehicleNotExistException e, WebRequest request) {
-        String message = String.format("An error occurred while getting Vehicle with id [{}] ", e.getEntityId());
+        String message = String.format("An error occurred while getting Vehicle with id [%s] ", e.getEntityId());
         log.error(message);
         ApiResponse<String> response = ApiResponse.<String>builder()
                 .message(message)
@@ -61,7 +61,7 @@ public class ServiceExceptionHandler {
 
     @ExceptionHandler(VehicleNotAvailableException.class)
     public ResponseEntity<ApiResponse<String>> handleVehicleNotAvailableException(VehicleNotAvailableException e, WebRequest request) {
-        String message = String.format("Vehicle is not available at pickup day/time [{}] and return day/time [{}]", e.getPickupDateTime(), e.getReturnDateTime());
+        String message = String.format("Vehicle is not available at pickup day/time [%s] and return day/time [%s]", e.getPickupDateTime(), e.getReturnDateTime());
         log.error(message);
         ApiResponse<String> response = ApiResponse.<String>builder()
                 .message(message)

@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flexter.bookingsystem.dto.VehicleDto;
+import com.flexter.bookingsystem.dto.VehicleEstimate;
 import com.flexter.bookingsystem.service.VehicleService;
 import com.flexter.bookingsystem.utils.Constants;
+import com.flexter.bookingsystem.utils.TimeUtils;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -40,19 +41,19 @@ public class VehicleController {
     private static final String VEHICLES_RETRIEVED = "Vehicles retrieved successfully";
 
     private final VehicleService vehicleService;
+    private final TimeUtils timeUtils;
 
     @GetMapping
-    public ResponseEntity<ApiListResponse<VehicleDto>> getVehicles(
+    public ResponseEntity<ApiListResponse<VehicleEstimate>> getVehicles(
             @RequestParam(required = true) String city,
             @RequestParam(required = true, name = "pickupDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime pickupDateTime,
-            @RequestParam(required = true, name = "returnDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime returnDateTime,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) throws Exception {
+            @RequestParam(required = true, name = "returnDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime returnDateTime
+            ) throws Exception {
 
         log.info("Getting vehicles for city={}, pickupDateTime={}, returnDateTime={}", city, pickupDateTime, returnDateTime);
-        List<VehicleDto> vehicles = vehicleService.getVehicles(city, pickupDateTime, returnDateTime);
+        List<VehicleEstimate> vehicles = vehicleService.getVehicles(city, pickupDateTime, returnDateTime);
 
-        ApiListResponse<VehicleDto> response = ApiListResponse.<VehicleDto>builder().data(vehicles).message(VEHICLES_RETRIEVED).build();
+        ApiListResponse<VehicleEstimate> response = ApiListResponse.<VehicleEstimate>builder().data(vehicles).total(vehicles!= null ? vehicles.size() : 0).message(VEHICLES_RETRIEVED).build();
         return ResponseEntity.ok(response);
     }
 }

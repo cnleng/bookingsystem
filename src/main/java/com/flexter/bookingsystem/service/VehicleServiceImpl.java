@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
 import com.flexter.bookingsystem.repository.VehicleRepository;
+import com.flexter.bookingsystem.utils.PriceCalculator;
 import com.flexter.bookingsystem.dto.VehicleDto;
+import com.flexter.bookingsystem.dto.VehicleEstimate;
 import com.flexter.bookingsystem.model.Vehicle;
 import com.flexter.bookingsystem.exception.VehicleException;
 
@@ -19,12 +21,27 @@ import com.flexter.bookingsystem.exception.VehicleException;
 public class VehicleServiceImpl implements VehicleService {
 
     private final VehicleRepository vehicleRepository;
+    private final PriceCalculator priceCalculator;
     private final ModelMapper mapper;
 
-    public List<VehicleDto> getVehicles(String city, LocalDateTime pickupDateTime, LocalDateTime returnDateTime) {
+    public List<VehicleEstimate> getVehicles(String city, LocalDateTime pickupDateTime, LocalDateTime returnDateTime) {
         try {
-            List<Vehicle> vehicles = this.vehicleRepository.getVehicleByCityPickupReturnTime(city, pickupDateTime, returnDateTime);
-            return vehicles.stream().map( v -> mapper.map(v, VehicleDto.class)).toList();
+            
+            List<Vehicle> vehicles = vehicleRepository.getVehicleByCityPickupReturnTime(
+                city, 
+                pickupDateTime.getDayOfWeek(),
+                returnDateTime.getDayOfWeek(),
+                pickupDateTime.toLocalTime(),
+                returnDateTime.toLocalTime()
+            );
+
+            if (vehicles!=null && !vehicles.isEmpty()) {
+                return vehicles.stream().map( 
+                    v -> VehicleEstimate.builder().price(priceCalculator.getPrice(pickupDateTime, returnDateTime, v.getRate())).vehicleDto(mapper.map(v, VehicleDto.class)).build())
+                    .toList();
+            }
+            return List.of();
+
         } catch(Exception e) {
             throw new VehicleException(e.getMessage());
         }
