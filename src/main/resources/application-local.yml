@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://bookingdb:5432/bookingdb
+    username: admin
+    password: dangerous
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+
+logging:
+  level:
+    root: info

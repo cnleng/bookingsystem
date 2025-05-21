@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: booking-system
+
+  profiles:
+    active: local # Default profile;
