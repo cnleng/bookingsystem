@@ -40,7 +40,7 @@ public class ServiceExceptionHandler {
     }
 
     @ExceptionHandler(BookingNotExistException.class)
-    public ResponseEntity<ApiResponse<String>> handleBookingNotExistException(BookingNotExistException e, WebRequest request) {
+    public ResponseEntity<ApiResponse<String>> handleBookingNotExistException(BookingNotExistException e) {
         String message = String.format("An error occurred while getting Booking with id [%s] ", e.getEntityId());
         log.error(message);
         ApiResponse<String> response = ApiResponse.<String>builder()
@@ -50,7 +50,7 @@ public class ServiceExceptionHandler {
     }
 
     @ExceptionHandler(VehicleNotExistException.class)
-    public ResponseEntity<ApiResponse<String>> handleVehicleNotExistException(VehicleNotExistException e, WebRequest request) {
+    public ResponseEntity<ApiResponse<String>> handleVehicleNotExistException(VehicleNotExistException e) {
         String message = String.format("An error occurred while getting Vehicle with id [%s] ", e.getEntityId());
         log.error(message);
         ApiResponse<String> response = ApiResponse.<String>builder()
@@ -60,13 +60,24 @@ public class ServiceExceptionHandler {
     }
 
     @ExceptionHandler(VehicleNotAvailableException.class)
-    public ResponseEntity<ApiResponse<String>> handleVehicleNotAvailableException(VehicleNotAvailableException e, WebRequest request) {
+    public ResponseEntity<ApiResponse<String>> handleVehicleNotAvailableException(VehicleNotAvailableException e) {
         String message = String.format("Vehicle is not available at pickup day/time [%s] and return day/time [%s]", e.getPickupDateTime(), e.getReturnDateTime());
         log.error(message);
         ApiResponse<String> response = ApiResponse.<String>builder()
                 .message(message)
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    @ExceptionHandler(TimeRangeValidationException.class)
+    public ResponseEntity<?> handleTimeRangeValidationException(TimeRangeValidationException e, HttpServletRequest request) {
+        String message = String.format("Time range is incorrect: pickup day/time [%s] is after return day/time [%s]", e.getStart(), e.getEnd());
+        log.error(message);
+        Map<String, String> result = new HashMap<>();
+        result.put("message", message);
+        result.put("pickupDateTime", e.getStart().toString());
+        result.put("returnDateTime", e.getEnd().toString());
+        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 
 }

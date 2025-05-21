@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.flexter.bookingsystem.utils.Constants;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,12 +21,12 @@ public final class CreateBookingRequest {
     private String vehicleId;
 
     @JsonProperty("pickupDateTime")
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     @NotNull(message = "The pickup Date and Time are required.")
     private LocalDateTime pickupDateTime;
 
     @JsonProperty("returnDateTime")
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     @NotNull(message = "The return Date and Time are required.")
     private LocalDateTime returnDateTime;
 }

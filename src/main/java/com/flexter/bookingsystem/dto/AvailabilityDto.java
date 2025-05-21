@@ -1,4 +1,5 @@
 package com.flexter.bookingsystem.dto;
+import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AvailabilityDto {
+public class AvailabilityDto implements Serializable {
     private String id;
     private DayOfWeek dayOfWeek;
     private LocalTime fromTime;

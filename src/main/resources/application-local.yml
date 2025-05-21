@@ -1,10 +1,9 @@
 spring:
-  cache:
-    type: redis
   data:
     redis:
-      host: rediscache
-      port: 6379
+        host: rediscache
+        port: 6379
+        timeout: 60000
 
   datasource:
     url: jdbc:postgresql://bookingdb:5432/bookingdb
@@ -17,12 +16,12 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true
+    # properties:
+    #   hibernate:
+    #     format_sql: true
 
 logging:
   level:
     root: info
-    org.hibernate.SQL: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
+    # org.hibernate.SQL: DEBUG
+    # org.hibernate.orm.jdbc.bind: TRACE

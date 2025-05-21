@@ -12,7 +12,6 @@ COPY src /app/src
 # Build the application
 RUN gradle wrapper && ./gradlew clean build
 
-# Stage 2: Create production image
 FROM openjdk:21-jdk
 
 WORKDIR /app

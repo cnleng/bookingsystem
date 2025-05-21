@@ -1,5 +1,6 @@
 package com.flexter.bookingsystem.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookingDto {
+public class BookingDto implements Serializable{
     private String id;
     private LocalDateTime bookedOnDateTime;
     private LocalDateTime pickupDateTime;

@@ -19,6 +19,16 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @AllArgsConstructor
 @Slf4j
+/**
+ * Represents a database seeder.
+ * <p>
+ * This class loads defaults values in database.
+ * </p>
+ * 
+ * @author Cyril Nleng
+ * @version 1.0
+ * @since 2025-05-19
+ */
 public class DataInitializer implements CommandLineRunner {
 
     private final VehicleRepository vehicleRepository;

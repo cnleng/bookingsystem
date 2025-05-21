@@ -1,20 +1,7 @@
 # version: "3.9"
 
 services:
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: dangerous
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    ports:
-       - "5050:80"
-    networks:
-        - backend
   db:
-    # image: postgres:16.2-alpine3.19
     image: postgres:16.2
     container_name: 'bookingdb'
     restart: always
@@ -22,8 +9,6 @@ services:
       - POSTGRES_DB=bookingdb
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=dangerous
-    # volumes:
-    #   - ./src/main/resources/V1__initial_setup.sql:/docker-entrypoint-initdb.d/V1__initial_setup.sql
     ports:
       - 5432:5432
     networks:
@@ -31,10 +16,12 @@ services:
 
   redis:
     image: redis:latest
-    container_name: redisdb
+    container_name: rediscache
     ports:
       - "6379:6379"
     restart: always
+    networks:
+        - backend
   
   booking-service:
     image: booking-service:latest

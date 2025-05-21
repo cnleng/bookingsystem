@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
@@ -24,6 +25,7 @@ public class VehicleServiceImpl implements VehicleService {
     private final PriceCalculator priceCalculator;
     private final ModelMapper mapper;
 
+    @Cacheable(value = "vehicle-city-cache", key = "#city + '-' + #pickupDateTime.toString()+ '-' + #returnDateTime.toString()")
     public List<VehicleEstimate> getVehicles(String city, LocalDateTime pickupDateTime, LocalDateTime returnDateTime) {
         try {
             

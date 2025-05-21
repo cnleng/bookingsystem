@@ -3,6 +3,9 @@ package com.flexter.bookingsystem.utils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.flexter.bookingsystem.exception.TimeRangeValidationException;
+import com.flexter.bookingsystem.utils.Constants;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,8 +16,8 @@ public class TimeUtils {
      * @param dateString
      * @return
      */
-    public LocalDateTime getLocalDateTime(String dateString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    public LocalDateTime getDateTime(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT);
         LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
         return localDateTime;
     }
@@ -27,8 +30,11 @@ public class TimeUtils {
      */
     public boolean validate(LocalDateTime start, LocalDateTime end) {
         if (start!=null && end != null) {
-            return start.isBefore(end);
+            if (!start.isBefore(end)) {
+                throw new TimeRangeValidationException(start, end);
+            }
+            return false;
         }
-        return false;
+        throw new TimeRangeValidationException( start, end);
     }
 }
