@@ -96,5 +96,7 @@ Backend Booking management API
 
 ## Room for Improvement
 
-* Complete covergae for Unit tests (unit tests, and mocks)
-* Complete validation fot transport objects
+* Complete coverage for Unit tests (unit tests, and mocks)
+* Complete validation for transport objects
+* More validation on inpur Strings (leading & trailing spaces, empty, etc )
+* Pagination 
